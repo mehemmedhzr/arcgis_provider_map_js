@@ -183,20 +183,18 @@
     // }
 
 
-    // document.addEventListener("DOMContentLoaded", () => {
-    //   const cityRegionSelect = document.getElementById("city_region");
-    //   const streetSelect = document.getElementById("street");
-    //   const entranceSelect = document.getElementById("entrance");
-    //   const addressPointSelect = document.getElementById("address_point");
+    async function fetchData(url) {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Network respons is not OK!');
+        return await response.json();
+      } catch (error) {
+        console.error('Error while fetching: ', error);
+        return;
+      }
+    }
 
-    //   function fetchData(url, callback) {
-    //       fetch(url)
-    //           .then(response => response.json())
-    //           .then(data => callback(data))
-    //           .catch(error => console.error("Error fetching data:", error));
-    //   }
-
-    //   function populateTreeselect(element, data, onChangeCallback) {
+    // function populateTreeselect(element, data, onChangeCallback) {
     //     const treeData = data.map(item => ({
     //         id: item.id,
     //         label: item.name,
@@ -216,24 +214,12 @@
     //     });
 
     //     return treeselect;
-    //   }
+    // }
 
-    //   fetchData("https://example.com/api/cities", (cities) => {
-    //     const cityRegionTree = populateTreeselect(cityRegionSelect, cities, (cityId) => {
-    //         fetchData(`https://example.com/api/streets?city_id=${cityId}`, (streets) => {
-    //             populateTreeselect(streetSelect, streets, (streetId) => {
-    //                 fetchData(`https://example.com/api/entrances?street_id=${streetId}`, (entrances) => {
-    //                     populateTreeselect(entranceSelect, entrances, (entranceId) => {
-    //                         fetchData(`https://example.com/api/address_points?entrance_id=${entranceId}`, (points) => {
-    //                             populateTreeselect(addressPointSelect, points, () => {});
-    //                         });
-    //                     });
-    //                 });
-    //             });
-    //         });
-    //     });
-    //   });
-    // });
+    // async function initializeTreeselects() {
+    //   const cityRegion = await fetchData('city.com/test')
+    //   const cityTreeselect = p;
+    // }
 
     require([
       "esri/config",
@@ -297,7 +283,7 @@
         polygonLayerUrls.forEach(url => {
           const layer = new FeatureLayer({ 
             url,
-            // visible: false,
+            visible: false,
           });
 
           layer.load().then(() => {
