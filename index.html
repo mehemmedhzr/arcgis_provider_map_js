@@ -61,10 +61,13 @@
 
   <!-- ArcGIS API -->
   <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/treeselectjs@0.12.0/dist/treeselectjs.css"/> -->
+
+  <!-- <script src="https://cdn.jsdelivr.net/npm/treeselectjs@0.12.0/dist/treeselectjs.umd.js"></script> -->
   <script src="https://js.arcgis.com/4.29/"></script>
 
   <!-- Yandex API -->
-  <script src="https://api-maps.yandex.ru/2.1/?apikey=e29817a8-e6c5-4d07-9767-ff8c8c5083d3&lang=en_US"></script>
+  <!-- <script src="https://api-maps.yandex.ru/2.1/?apikey=e29817a8-e6c5-4d07-9767-ff8c8c5083d3&lang=en_US"></script> -->
 </head>
 <style>
   div.d_none{
@@ -155,7 +158,83 @@
 
   <div id="sidebar" class=""></div>
 
+  <!-- <div>
+    <label for="city_region">City/Region</label>
+    <select id="city_region"></select>
+
+    <label for="street">Street</label>
+    <select id="street"></select>
+
+    <label for="entrance">Entrance</label>
+    <select id="entrance"></select>
+
+    <label for="address_point">Address Point</label>
+    <select id="address_point"></select>
+  </div> -->
+
   <script>
+
+    // function fetchData(url, authKey, callback) {
+    //     const requestUrl = `${url}?authkey=${authKey}`;
+    //     fetch(requestUrl)
+    //         .then(response => response.json())
+    //         // .then(data => callback(data))
+    //         .catch(error => console.error("Error fetching data:", error));
+    // }
+
+
+    // document.addEventListener("DOMContentLoaded", () => {
+    //   const cityRegionSelect = document.getElementById("city_region");
+    //   const streetSelect = document.getElementById("street");
+    //   const entranceSelect = document.getElementById("entrance");
+    //   const addressPointSelect = document.getElementById("address_point");
+
+    //   function fetchData(url, callback) {
+    //       fetch(url)
+    //           .then(response => response.json())
+    //           .then(data => callback(data))
+    //           .catch(error => console.error("Error fetching data:", error));
+    //   }
+
+    //   function populateTreeselect(element, data, onChangeCallback) {
+    //     const treeData = data.map(item => ({
+    //         id: item.id,
+    //         label: item.name,
+    //         children: item.children || []
+    //     }));
+
+    //     const treeselect = new Treeselect({
+    //         parentHtmlContainer: element.parentElement,
+    //         value: null,
+    //         options: treeData,
+    //         emptyText: "Select an option",
+    //         searchable: true
+    //     });
+
+    //     treeselect.on("input", (node) => {
+    //         onChangeCallback(node.id);
+    //     });
+
+    //     return treeselect;
+    //   }
+
+    //   fetchData("https://example.com/api/cities", (cities) => {
+    //     const cityRegionTree = populateTreeselect(cityRegionSelect, cities, (cityId) => {
+    //         fetchData(`https://example.com/api/streets?city_id=${cityId}`, (streets) => {
+    //             populateTreeselect(streetSelect, streets, (streetId) => {
+    //                 fetchData(`https://example.com/api/entrances?street_id=${streetId}`, (entrances) => {
+    //                     populateTreeselect(entranceSelect, entrances, (entranceId) => {
+    //                         fetchData(`https://example.com/api/address_points?entrance_id=${entranceId}`, (points) => {
+    //                             populateTreeselect(addressPointSelect, points, () => {});
+    //                         });
+    //                     });
+    //                 });
+    //             });
+    //         });
+    //     });
+    //   });
+    // });
+
     require([
       "esri/config",
       "esri/Map",
@@ -235,8 +314,6 @@
             console.error("Error loading polygon layer: ", error);
           });
         });
-        
-
 
         function showSidebar(features, sampleCoords) {
           const sidebar = document.getElementById("sidebar");
@@ -331,7 +408,7 @@
 
               view.goTo({
                 center: [pinnedLongitude, pinnedLatitude], 
-                zoom: 17,
+                zoom: 19,
               });
 
               const point = {
@@ -366,7 +443,6 @@
             }
         });
     });
-
   </script>
 </body>
 </html>
