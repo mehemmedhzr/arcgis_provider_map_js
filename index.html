@@ -38,6 +38,7 @@
 
         &.open {
           transform: translateX(0%);
+          border-right: 1px solid #3c6cb445;
         }
 
         .close_btn{
@@ -132,6 +133,38 @@
         }
       }
 
+      .nav_container{
+        position: absolute;
+        top: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background-color: #fff;
+        border-radius: 4px;
+        border-bottom: 1px solid #3c6cb4;
+
+        .top_bar{
+          display: none;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+
+          span{
+            font-size: 20px;
+            color: #3c6cb4;
+            font-weight: 500;
+          }
+
+          svg{
+            display: none;
+            width: 18px;
+            cursor: pointer;
+          }
+        }
+      }
+
       #selects{
         position: absolute;
         top: 24px;
@@ -140,38 +173,34 @@
         display: flex;
         align-items: center;
         gap: 14px;
-        background-color: #3c6cb4;
+        background-color: #fff;
         padding: 16px 24px;
         border-radius: 4px;
-        border: 1px solid #fff;
-
-        .info_text{
-          display: none;
-          font-size: 16px;
-        }
+        border: 1px solid #3c6cb4;
 
         >div{
           display: flex;
           flex-direction: column;
           gap: 8px;
-          color: #ffeeee;
+          color: #3c6cb4;
 
           select{
             min-width: 200px;
-
           }
 
           .select2-container--default.select2-container--disabled .select2-selection--single {
               background-color: #eeeeee99;
               cursor: not-allowed;
+              opacity: 0.4;
           }
         }
 
-        >svg{
-          display: none;
-          width: 18px;
-          margin-top: 4px;
-          cursor: pointer;
+        .select2-container--default .select2-selection--single .select2-selection__rendered{
+          color: #3c6cb4;
+        }
+
+        .select2-container--default .select2-selection--single{
+          border-color: #3c6cb4;
         }
       }
 
@@ -180,61 +209,108 @@
           min-width: 280px;
         }
 
-        #selects {
-            top: 20px;
-            padding: 14px 20px;
-            flex-direction: column;
-            gap: 0px;
+        .nav_container{
+          top: 0px;
+          padding: 6px 14px;
+          flex-direction: column;
+          gap: 0px;
+          left: 0;
+          right: 0;
+          transform: none;
+          border-radius: 0px;
 
-            &.open{
-              gap: 8px;
-            }
+          .top_bar{
+            display: flex;
 
-            .info_text{
+            svg{
               display: block;
+              cursor: pointer;
             }
+          }
+        }
+
+        #selects {
+          top: 47px;
+          flex-direction: column;
+          padding: 0;
+          gap: 0px;
+          left: 0;
+          right: 0;
+          transform: none;
+          border-radius: 0px;
+          border-color: transparent;
+          border-top-color: #3c6cb4;
+
+          &.open{
+            padding: 14px 20px;
+            border-top-color: transparent;
+            border-color: #3c6cb4;
+            gap: 4px;
 
             >div{
-              gap: 2px;
-              font-size: 14px;
+              visibility: visible;
+              height: auto;
 
-              select{
-                min-width: 200px;
+              label{
+                font-size: 13px;
               }
             }
+          }
 
-            >.down_caret{
-              display: block;
-            }
+          >div{
+            gap: 0px;
+            font-size: 14px;
+            visibility: hidden;
+            height: 0;
+          }
         }
-      }
 
-      @media screen and (width <= 900px){
-        #selects {
-          left: auto;
-          right: 24px;
-          transform: none;
+        span.select2-container.select2-container--default{
+          font-size: 13px;
         }
       }
 
       @media screen and (width <= 530px){
-        .esri-view-width-xsmall .esri-expand--auto .esri-expand__container--expanded {
+        /* .esri-view-width-xsmall .esri-expand--auto .esri-expand__container--expanded {
           height: 50% !important;
           top: auto !important;
           bottom: 0;
+        } */
+
+        .esri-view-width-xsmall .esri-ui-top-right .esri-expand--auto .esri-expand__container--expanded, .esri-view-width-xsmall .esri-ui-bottom-right .esri-expand--auto .esri-expand__container--expanded {
+          width: 40%;
+        }
+
+        .esri-view-height-medium .esri-ui-corner .esri-component .esri-expand__content {
+          max-height: unset !important;
+        }
+
+        .esri-view-height-medium .esri-expand .esri-widget--panel-height-only{
+          max-height: unset !important;
         }
       }
 
       @media screen and (width <= 400px){
         #selects {
-          top: 2px;
-          padding: 8px 16px;
+          top: 43px;
+          &.open{
+            padding: 8px 16px;
+          }
 
-            >div{
-              select{
-                min-width: 170px;
-              }
+          >div{
+            select{
+              min-width: 170px;
             }
+          }
+        }
+
+        .nav_container{
+          .top_bar{
+
+            span{
+              font-size: 18px;
+            }
+          }
         }
       }
     </style>
@@ -253,43 +329,54 @@
 
     <div id="sidebar" class=""></div>
 
-    <div id="selects" class="">
-      <div class="info_text">Axtarış...</div>
-
-      <div>
-        <label for="city_region">City/Region</label>
-        <select id="city_region" style="display: block">
-          <option value="" selected disabled>Select City</option>
-        </select>
+    <div class="nav_container">
+      <div class="top_bar">
+        <span>Internet providers' map</span>
+        <svg class="search_icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#3c6cb4" d="M368 208A160 160 0 1 0 48 208a160 160 0 1 0 320 0zM337.1 371.1C301.7 399.2 256.8 416 208 416C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208c0 48.8-16.8 93.7-44.9 129.1L505 471c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L337.1 371.1z"/></svg>
       </div>
 
-      <div>
-        <label for="street">Street</label>
-        <select id="street" style="display: block" disabled>
-          <option value="">Select Street</option>
-        </select>
+      <div id="selects" class="">
+        <div>
+          <label for="city_region">City/Region</label>
+          <select id="city_region" style="display: block">
+            <option value="" selected disabled>Select City</option>
+          </select>
+        </div>
+  
+        <div>
+          <label for="street">Street</label>
+          <select id="street" style="display: block" disabled>
+            <option value="">Select Street</option>
+          </select>
+        </div>
+  
+        <div>
+          <label for="entrance">Entrance</label>
+          <select id="entrance" style="display: block" disabled>
+            <option value="">Select Entrance</option>
+          </select>
+        </div>
+  
+        <div>
+          <label for="address_point">Address Point</label>
+          <select id="address_point" style="display: block" disabled>
+            <option value="">Select Address</option>
+          </select>
+        </div>
       </div>
-
-      <div>
-        <label for="entrance">Entrance</label>
-        <select id="entrance" style="display: block" disabled>
-          <option value="">Select Entrance</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="address_point">Address Point</label>
-        <select id="address_point" style="display: block" disabled>
-          <option value="">Select Address</option>
-        </select>
-      </div>
-
-      <svg xmlns="http://www.w3.org/2000/svg" class="up_caret" viewBox="0 0 320 512"><path fill="#ffffff" d="M32 288l256 0 0-1.7L160 171 32 286.2l0 1.7zm0 32L0 320l0-32 0-16L160 128 320 272l0 16 0 32-32 0L32 320z"/></svg>
-
-      <svg xmlns="http://www.w3.org/2000/svg" class="down_caret" viewBox="0 0 320 512"><path fill="#ffffff" d="M288 224L32 224l0 1.7L160 341 288 225.8l0-1.7zm0-32l32 0 0 32 0 16L160 384 0 240l0-16 0-32 32 0 256 0z"/></svg>
     </div>
 
     <script>
+      if(document.querySelector('.search_icon')){
+        document.querySelector('.search_icon').addEventListener('click', function(e){
+          if( document.getElementById('selects').classList.contains('open')){
+            document.getElementById('selects').classList.remove('open');
+          } else {
+            document.getElementById('selects').classList.add('open');
+          }
+        })
+      }
+
       async function fetchData(url) {
         try {
           const response = await fetch(url);
@@ -511,6 +598,7 @@
           expandTooltip: "Show Basemap Gallery"
         });
 
+        view.ui.move("zoom", "bottom-right");
         view.ui.add(basemapExpand, "bottom-right");
 
         const polygonLayerUrls = [
@@ -552,7 +640,7 @@
 
           if(noInfo){
             sidebar.innerHTML += `
-              <svg class="close_btn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="#dc3545" d="M378.4 71.4c8.5-10.1 7.2-25.3-2.9-33.8s-25.3-7.2-33.8 2.9L192 218.7 42.4 40.6C33.9 30.4 18.7 29.1 8.6 37.6S-2.9 61.3 5.6 71.4L160.7 256 5.6 440.6c-8.5 10.2-7.2 25.3 2.9 33.8s25.3 7.2 33.8-2.9L192 293.3 341.6 471.4c8.5 10.2 23.7 11.5 33.8 2.9s11.5-23.7 2.9-33.8L223.3 256l155-184.6z"/></svg>
+              <svg class="close_btn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="#dc3545" d="M345 137c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-119 119L73 103c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l119 119L39 375c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l119-119L311 409c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-119-119L345 137z"/></svg>
               <a class="polygon_info no_provider" href='#' target="_blank">
                 Seçilmiş ünvanda heç bir provayder fəaliyyət göstərmir
               </a>`;
@@ -564,7 +652,7 @@
             features.forEach((feature, index) => {
               const attributes = feature[0].attributes;
               sidebar.innerHTML += `
-                <svg class="close_btn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="#dc3545" d="M378.4 71.4c8.5-10.1 7.2-25.3-2.9-33.8s-25.3-7.2-33.8 2.9L192 218.7 42.4 40.6C33.9 30.4 18.7 29.1 8.6 37.6S-2.9 61.3 5.6 71.4L160.7 256 5.6 440.6c-8.5 10.2-7.2 25.3 2.9 33.8s25.3 7.2 33.8-2.9L192 293.3 341.6 471.4c8.5 10.2 23.7 11.5 33.8 2.9s11.5-23.7 2.9-33.8L223.3 256l155-184.6z"/></svg>
+                <svg class="close_btn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="#dc3545" d="M345 137c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-119 119L73 103c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l119 119L39 375c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l119-119L311 409c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-119-119L345 137z"/></svg>
                 <a class="polygon_info" href='https://e-complaint.icta.az?uid=${
                   attributes.NAME_RT
                 }&d_lat="${d_lat}"&d_lon="${d_lon}"' target="_blank">
@@ -616,7 +704,6 @@
           }
         
           const close = sidebar.querySelector('.close_btn');
-          console.log(close);
           close.addEventListener('click', function() {
             document.getElementById("sidebar").classList.remove("open");
           })
@@ -700,8 +787,8 @@
         });
       });
     
-      mediaQuery.addListener(handleScreenSizeChange);
-      handleScreenSizeChange(mediaQuery);
+      // mediaQuery.addListener(handleScreenSizeChange);
+      // handleScreenSizeChange(mediaQuery);
     </script>
   </body>
 </html>
