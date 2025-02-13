@@ -403,96 +403,197 @@
         }
       }
 
+      // document.addEventListener("DOMContentLoaded", async function () {
+      //   $("select").select2();
+
+      //   const citySelect = document.getElementById("city_region");
+      //   const streetSelect = document.getElementById("street");
+      //   const entranceSelect = document.getElementById("entrance");
+      //   const addressSelect = document.getElementById("address_point");
+
+      //   function resetSelect(select) {
+      //       select.innerHTML = '<option value="">Select</option>';
+      //       select.disabled = true;
+      //       $(select).select2();
+      //   }
+
+      //   const cityData = await fetchData('http://localhost:8001/api/getAllAdminUnits', 'X-API-KEY', 'wF4LggHCvwf1it9G0kuPcr9YAfcW44M5ymS0fKmh12nvtXNvjJJKHek5PWhftH9xgmvgF5i05CYnJ1JWdYba9MTdRV5WR8ZLUemHJ1hHkyAHW4SBetZLgYH2332dHPD54XfMh56apDcH91KaevpHCK');
+
+      //   cityData.data?.map(data => {
+      //     const option = document.createElement('option');
+      //     option.value = data.adminId;
+      //     option.innerHTML = data.name;
+      //     citySelect.appendChild(option);
+      //   })
+
+      //   $(citySelect).on("change", async function (e) {
+      //       resetSelect(streetSelect);
+      //       resetSelect(entranceSelect);
+      //       resetSelect(addressSelect);
+      //       if (this.value) {
+      //         const streetData = await fetchData(
+      //             'http://localhost:8001/api/getStreetByAdmin',
+      //             'X-API-KEY',
+      //             'wF4LggHCvwf1it9G0kuPcr9YAfcW44M5ymS0fKmh12nvtXNvjJJKHek5PWhftH9xgmvgF5i05CYnJ1JWdYba9MTdRV5WR8ZLUemHJ1hHkyAHW4SBetZLgYH2332dHPD54XfMh56apDcH91KaevpHCK',
+      //             'adminId',
+      //             e.target.value
+      //         );
+
+      //         streetData.data?.map(data => {
+      //           const option = document.createElement('option');
+      //           option.value = data.streetId;
+      //           option.innerHTML = data.streetName;
+      //           streetSelect.appendChild(option);
+      //         })
+      //         streetSelect.disabled = false;
+      //         $(streetSelect).select2();
+      //       }
+      //   });
+
+      //   $(streetSelect).on("change", async function (e) {
+      //       resetSelect(entranceSelect);
+      //       resetSelect(addressSelect);
+            
+      //       if (this.value) {
+      //         const entranceData = await fetchData(
+      //             'http://localhost:8001/api/getEntranceByStreetID',
+      //             'X-API-KEY',
+      //             'wF4LggHCvwf1it9G0kuPcr9YAfcW44M5ymS0fKmh12nvtXNvjJJKHek5PWhftH9xgmvgF5i05CYnJ1JWdYba9MTdRV5WR8ZLUemHJ1hHkyAHW4SBetZLgYH2332dHPD54XfMh56apDcH91KaevpHCK',
+      //             'streetID',
+      //             e.target.value
+      //         );
+
+      //         entranceData.data?.map(data => {
+      //           const option = document.createElement('option');
+      //           option.value = data.addressId;
+      //           option.innerHTML = data.no;
+      //           entranceSelect.appendChild(option);
+      //         })
+      //         entranceSelect.disabled = false;
+      //         $(entranceSelect).select2();
+      //       }
+      //   });
+
+      //   $(entranceSelect).on("change", async function (e) {
+      //       resetSelect(addressSelect);
+            
+      //       if (this.value) {
+      //         // const addressData = await fetchData('test.com/address');
+      //         const addressData = await fetchData(
+      //             'http://localhost:8001/api/getEntranceAddressPoint_WGS',
+      //             'X-API-KEY',
+      //             'wF4LggHCvwf1it9G0kuPcr9YAfcW44M5ymS0fKmh12nvtXNvjJJKHek5PWhftH9xgmvgF5i05CYnJ1JWdYba9MTdRV5WR8ZLUemHJ1hHkyAHW4SBetZLgYH2332dHPD54XfMh56apDcH91KaevpHCK',
+      //             'entranceAddressID',
+      //             e.target.value
+      //         );
+      //         console.log(addressData.data);
+      //         console.log(addressData.data.x);
+      //         addressSelect.disabled = false;
+      //         $(addressSelect).select2();
+      //       }
+      //   });
+      // });
+
       document.addEventListener("DOMContentLoaded", async function () {
-        $("select").select2();
+            $("select").select2();
 
-        const citySelect = document.getElementById("city_region");
-        const streetSelect = document.getElementById("street");
-        const entranceSelect = document.getElementById("entrance");
-        const addressSelect = document.getElementById("address_point");
+            const citySelect = document.getElementById("city_region");
+            const streetSelect = document.getElementById("street");
+            const entranceSelect = document.getElementById("entrance");
+            const addressSelect = document.getElementById("address_point");
 
-        function resetSelect(select) {
-            select.innerHTML = '<option value="">Select</option>';
-            select.disabled = true;
-            $(select).select2();
-        }
-
-        const cityData = await fetchData('http://localhost:8001/api/getAllAdminUnits', 'X-API-KEY', 'wF4LggHCvwf1it9G0kuPcr9YAfcW44M5ymS0fKmh12nvtXNvjJJKHek5PWhftH9xgmvgF5i05CYnJ1JWdYba9MTdRV5WR8ZLUemHJ1hHkyAHW4SBetZLgYH2332dHPD54XfMh56apDcH91KaevpHCK');
-
-        cityData.data?.map(data => {
-          const option = document.createElement('option');
-          option.value = data.adminId;
-          option.innerHTML = data.name;
-          citySelect.appendChild(option);
-        })
-
-        $(citySelect).on("change", async function (e) {
-            resetSelect(streetSelect);
-            resetSelect(entranceSelect);
-            resetSelect(addressSelect);
-            if (this.value) {
-              const streetData = await fetchData(
-                'http://localhost:8001/api/getStreetByAdmin',
-                'X-API-KEY',
-                'wF4LggHCvwf1it9G0kuPcr9YAfcW44M5ymS0fKmh12nvtXNvjJJKHek5PWhftH9xgmvgF5i05CYnJ1JWdYba9MTdRV5WR8ZLUemHJ1hHkyAHW4SBetZLgYH2332dHPD54XfMh56apDcH91KaevpHCK',
-                'adminId',
-                e.target.value
-            );
-
-              streetData.data?.map(data => {
-                const option = document.createElement('option');
-                option.value = data.streetId;
-                option.innerHTML = data.streetName;
-                streetSelect.appendChild(option);
-              })
-              streetSelect.disabled = false;
-              $(streetSelect).select2();
+            function resetSelect(select) {
+                select.innerHTML = '<option value="">Select</option>';
+                select.disabled = true;
+                $(select).select2();
             }
-        });
 
-        $(streetSelect).on("change", async function (e) {
-            resetSelect(entranceSelect);
-            resetSelect(addressSelect);
-            
-            if (this.value) {
-              const entranceData = await fetchData(
-                  'http://localhost:8001/api/getEntranceByStreetID',
-                  'X-API-KEY',
-                  'wF4LggHCvwf1it9G0kuPcr9YAfcW44M5ymS0fKmh12nvtXNvjJJKHek5PWhftH9xgmvgF5i05CYnJ1JWdYba9MTdRV5WR8ZLUemHJ1hHkyAHW4SBetZLgYH2332dHPD54XfMh56apDcH91KaevpHCK',
-                  'streetID',
-                  e.target.value
-              );
+            // const cityData = await fetchData('test.com/city');
+            const cityData = [
+                    {
+                      name: 'city1',
+                      value: 'city1val'
+                    },
+                    {
+                      name: 'city2',
+                      value: 'city2val'
+                    }
+                  ];
+            cityData?.map(data => {
+              citySelect.innerHTML += `<option value=${data.value}>${data.name}</option>`;
+            })
 
-              entranceData.data?.map(data => {
-                const option = document.createElement('option');
-                option.value = data.addressId;
-                option.innerHTML = data.no;
-                entranceSelect.appendChild(option);
-              })
-              entranceSelect.disabled = false;
-              $(entranceSelect).select2();
-            }
-        });
+            $(citySelect).on("change", async function () {
+                resetSelect(streetSelect);
+                resetSelect(entranceSelect);
+                resetSelect(addressSelect);
+                if (this.value) {
+                  // const streetData = await fetchData('test.com/street');
+                  const streetData = [
+                    {
+                      name: 'street1',
+                      value: 'street1val'
+                    },
+                    {
+                      name: 'street2',
+                      value: 'street2val'
+                    }
+                  ];
+                  streetData?.map(data => {
+                    streetSelect.innerHTML += `<option value=${data.value}>${data.name}</option>`;
+                  })
+                  streetSelect.disabled = false;
+                  $(streetSelect).select2();
+                }
+            });
 
-        $(entranceSelect).on("change", async function (e) {
-            resetSelect(addressSelect);
-            
-            if (this.value) {
-              // const addressData = await fetchData('test.com/address');
-              const addressData = await fetchData(
-                  'http://localhost:8001/api/getEntranceAddressPoint_WGS',
-                  'X-API-KEY',
-                  'wF4LggHCvwf1it9G0kuPcr9YAfcW44M5ymS0fKmh12nvtXNvjJJKHek5PWhftH9xgmvgF5i05CYnJ1JWdYba9MTdRV5WR8ZLUemHJ1hHkyAHW4SBetZLgYH2332dHPD54XfMh56apDcH91KaevpHCK',
-                  'entranceAddressID',
-                  e.target.value
-              );
-              console.log(addressData.data);
-              console.log(addressData.data.x);
-              addressSelect.disabled = false;
-              $(addressSelect).select2();
-            }
+            $(streetSelect).on("change", async function () {
+                resetSelect(entranceSelect);
+                resetSelect(addressSelect);
+
+                if (this.value) {
+                  // const entranceData = await fetchData('test.com/entrance');
+                  const entranceData = [
+                    {
+                      name: 'entrance1',
+                      value: 'entrance1val'
+                    },
+                    {
+                      name: 'entrance2',
+                      value: 'entrance2val'
+                    }
+                  ];
+                  entranceData?.map(data => {
+                    entranceSelect.innerHTML += `<option value=${data.value}>${data.name}</option>`;
+                  })
+                  entranceSelect.disabled = false;
+                  $(entranceSelect).select2();
+                }
+            });
+
+            $(entranceSelect).on("change", async function () {
+                resetSelect(addressSelect);
+
+                if (this.value) {
+                  // const addressData = await fetchData('test.com/address');
+                  const addressData = [
+                    {
+                      name: 'address1',
+                      value: 'address1val'
+                    },
+                    {
+                      name: 'address2',
+                      value: 'address2val'
+                    }
+                  ];
+                  addressData?.map(data => {
+                    addressSelect.innerHTML += `<option value=${data.value}>${data.name}</option>`;
+                  })
+                  addressSelect.disabled = false;
+                  $(addressSelect).select2();
+                }
+            });
         });
-      });
 
       const mediaQuery = window.matchMedia("(max-width: 999px)");
 
