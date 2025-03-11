@@ -420,10 +420,7 @@
         bodyValue,
         coords
       ) {
-        console.log(url);
-        console.log(headerKey, ": ", headerValue);
-        console.log(bodyKey, ": ", bodyValue);
-        console.log(coords);
+        
         if (coords) {
           try {
             const response = await fetch(url, {
@@ -464,103 +461,7 @@
         }
       }
 
-      document.addEventListener("DOMContentLoaded", async function () {
-        $("select").select2();
-
-        const citySelect = document.getElementById("city_region");
-        const streetSelect = document.getElementById("street");
-        const entranceSelect = document.getElementById("entrance");
-        const addressSelect = document.getElementById("address_point");
-
-        function resetSelect(select) {
-          select.innerHTML = '<option value="">Select</option>';
-          select.disabled = true;
-          $(select).select2();
-        }
-
-        const cityData = await fetchData(
-          "https://e-complaint.icta.az/api/getAllAdminUnits",
-          "X-API-KEY",
-          "wF4LggHCvwf1it9G0kuPcr9YAfcW44M5ymS0fKmh12nvtXNvjJJKHek5PWhftH9xgmvgF5i05CYnJ1JWdYba9MTdRV5WR8ZLUemHJ1hHkyAHW4SBetZLgYH2332dHPD54XfMh56apDcH91KaevpHCK"
-        );
-
-        cityData.data?.map((data) => {
-          const option = document.createElement("option");
-          option.value = data.adminId;
-          option.innerHTML = data.name;
-          citySelect.appendChild(option);
-        });
-
-        $(citySelect).on("change", async function (e) {
-          resetSelect(streetSelect);
-          resetSelect(entranceSelect);
-          resetSelect(addressSelect);
-          if (this.value) {
-            const streetData = await fetchData(
-              "https://e-complaint.icta.az/api/getStreetByAdmin",
-              "X-API-KEY",
-              "wF4LggHCvwf1it9G0kuPcr9YAfcW44M5ymS0fKmh12nvtXNvjJJKHek5PWhftH9xgmvgF5i05CYnJ1JWdYba9MTdRV5WR8ZLUemHJ1hHkyAHW4SBetZLgYH2332dHPD54XfMh56apDcH91KaevpHCK",
-              "adminId",
-              e.target.value
-            );
-
-            streetData.data?.map((data) => {
-              const option = document.createElement("option");
-              option.value = data.streetId;
-              option.innerHTML = data.streetName;
-              streetSelect.appendChild(option);
-            });
-            streetSelect.disabled = false;
-            $(streetSelect).select2();
-          }
-        });
-
-        $(streetSelect).on("change", async function (e) {
-          resetSelect(entranceSelect);
-          resetSelect(addressSelect);
-
-          if (this.value) {
-            const entranceData = await fetchData(
-              "https://e-complaint.icta.az/api/getEntranceByStreetID",
-              "X-API-KEY",
-              "wF4LggHCvwf1it9G0kuPcr9YAfcW44M5ymS0fKmh12nvtXNvjJJKHek5PWhftH9xgmvgF5i05CYnJ1JWdYba9MTdRV5WR8ZLUemHJ1hHkyAHW4SBetZLgYH2332dHPD54XfMh56apDcH91KaevpHCK",
-              "streetID",
-              e.target.value
-            );
-
-            entranceData.data?.map((data) => {
-              const option = document.createElement("option");
-              option.value = data.addressId;
-              option.innerHTML = data.no;
-              entranceSelect.appendChild(option);
-            });
-            entranceSelect.disabled = false;
-            $(entranceSelect).select2();
-          }
-        });
-
-        $(entranceSelect).on("change", async function (e) {
-          resetSelect(addressSelect);
-
-          if (this.value) {
-            const addressData = await fetchData(
-              "https://e-complaint.icta.az/api/getEntranceAddressPoint_WGS",
-              "X-API-KEY",
-              "wF4LggHCvwf1it9G0kuPcr9YAfcW44M5ymS0fKmh12nvtXNvjJJKHek5PWhftH9xgmvgF5i05CYnJ1JWdYba9MTdRV5WR8ZLUemHJ1hHkyAHW4SBetZLgYH2332dHPD54XfMh56apDcH91KaevpHCK",
-              "entranceAddressID",
-              e.target.value
-            );
-            console.log(addressData.data);
-            console.log(addressData.data.x);
-            
-            const sampleCoords = [addressData.data.y, addressData.data.x];
-
-            checkIfPointIntersects(null, sampleCoords);
-            addressSelect.disabled = false;
-            $(addressSelect).select2();
-          }
-        });
-      });
+      
 
       // document.addEventListener("DOMContentLoaded", async function () {
       //       $("select").select2();
@@ -789,7 +690,7 @@
         polygonLayerUrls.forEach((url) => {
           const layer = new FeatureLayer({
             url,
-            // visible: false,
+            visible: false,
           });
 
           layer
@@ -889,10 +790,38 @@
           const intersectedPolygons = [];
 
           if(markerPoint === null) {
+            view.goTo({
+              center: [sampleCoords[1], sampleCoords[0]],
+              zoom: 19,
+            });
+
             markerPoint = new Point({
               longitude: sampleCoords[1],
               latitude: sampleCoords[0],
             });
+
+            const point = {
+              type: "point",
+              longitude: sampleCoords[1],
+              latitude: sampleCoords[0],
+            };
+
+            const markerSymbol = new SimpleMarkerSymbol({
+              color: [226, 119, 40],
+              size: 10,
+              outline: {
+                color: [255, 255, 255],
+                width: 2,
+              },
+            });
+
+            const pointGraphic = new Graphic({
+              geometry: point,
+              symbol: markerSymbol,
+            });
+
+            view.graphics.removeAll();
+            view.graphics.add(pointGraphic);
           }
 
           const queryPromises = polygonLayers.map((layer) => {
@@ -924,6 +853,102 @@
             }
           });
         }
+
+        async function fourStepSearch() {
+          $("select").select2();
+          const citySelect = document.getElementById("city_region");
+          const streetSelect = document.getElementById("street");
+          const entranceSelect = document.getElementById("entrance");
+          const addressSelect = document.getElementById("address_point");
+
+          function resetSelect(select) {
+            select.innerHTML = '<option value="">Select</option>';
+            select.disabled = true;
+            $(select).select2();
+          }
+
+          const cityData = await fetchData(
+            "https://e-complaint.icta.az/api/getAllAdminUnits",
+            "X-API-KEY",
+            "wF4LggHCvwf1it9G0kuPcr9YAfcW44M5ymS0fKmh12nvtXNvjJJKHek5PWhftH9xgmvgF5i05CYnJ1JWdYba9MTdRV5WR8ZLUemHJ1hHkyAHW4SBetZLgYH2332dHPD54XfMh56apDcH91KaevpHCK"
+          );
+
+          cityData.data?.map((data) => {
+            const option = document.createElement("option");
+            option.value = data.adminId;
+            option.innerHTML = data.name;
+            citySelect.appendChild(option);
+          });
+
+          $(citySelect).on("change", async function (e) {
+            resetSelect(streetSelect);
+            resetSelect(entranceSelect);
+            resetSelect(addressSelect);
+            if (this.value) {
+              const streetData = await fetchData(
+                "https://e-complaint.icta.az/api/getStreetByAdmin",
+                "X-API-KEY",
+                "wF4LggHCvwf1it9G0kuPcr9YAfcW44M5ymS0fKmh12nvtXNvjJJKHek5PWhftH9xgmvgF5i05CYnJ1JWdYba9MTdRV5WR8ZLUemHJ1hHkyAHW4SBetZLgYH2332dHPD54XfMh56apDcH91KaevpHCK",
+                "adminId",
+                e.target.value
+              );
+
+              streetData.data?.map((data) => {
+                const option = document.createElement("option");
+                option.value = data.streetId;
+                option.innerHTML = data.streetName;
+                streetSelect.appendChild(option);
+              });
+              streetSelect.disabled = false;
+              $(streetSelect).select2();
+            }
+          });
+
+          $(streetSelect).on("change", async function (e) {
+            resetSelect(entranceSelect);
+            resetSelect(addressSelect);
+
+            if (this.value) {
+              const entranceData = await fetchData(
+                "https://e-complaint.icta.az/api/getEntranceByStreetID",
+                "X-API-KEY",
+                "wF4LggHCvwf1it9G0kuPcr9YAfcW44M5ymS0fKmh12nvtXNvjJJKHek5PWhftH9xgmvgF5i05CYnJ1JWdYba9MTdRV5WR8ZLUemHJ1hHkyAHW4SBetZLgYH2332dHPD54XfMh56apDcH91KaevpHCK",
+                "streetID",
+                e.target.value
+              );
+
+              entranceData.data?.map((data) => {
+                const option = document.createElement("option");
+                option.value = data.addressId;
+                option.innerHTML = data.no;
+                entranceSelect.appendChild(option);
+              });
+              entranceSelect.disabled = false;
+              $(entranceSelect).select2();
+            }
+          });
+
+          $(entranceSelect).on("change", async function (e) {
+            resetSelect(addressSelect);
+
+            if (this.value) {
+              const addressData = await fetchData(
+                "https://e-complaint.icta.az/api/getEntranceAddressPoint_WGS",
+                "X-API-KEY",
+                "wF4LggHCvwf1it9G0kuPcr9YAfcW44M5ymS0fKmh12nvtXNvjJJKHek5PWhftH9xgmvgF5i05CYnJ1JWdYba9MTdRV5WR8ZLUemHJ1hHkyAHW4SBetZLgYH2332dHPD54XfMh56apDcH91KaevpHCK",
+                "entranceAddressID",
+                e.target.value
+              );
+              
+              const sampleCoords = [addressData.data.y, addressData.data.x];
+
+              checkIfPointIntersects(null, sampleCoords);
+              addressSelect.disabled = false;
+              $(addressSelect).select2();
+            }
+          });
+        };
+        fourStepSearch()
 
         view.on("click", async (event) => {
           const clickPoint = event.mapPoint;
@@ -974,7 +999,6 @@
               null,
               sampleCoords
             );
-            console.log(sampleCoords);
           }
         });
       });
