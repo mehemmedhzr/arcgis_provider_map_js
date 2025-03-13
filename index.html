@@ -206,6 +206,21 @@
           border-color: #3c6cb4;
         }
       }
+      
+      #myButton{
+        position: absolute;
+        bottom: 110px;
+        right: 4px;
+        border-radius: 50px;
+        background-color: white;
+        border: none;
+        padding: 12px 16px 8px 16px;
+        cursor: pointer;
+
+        svg{
+          width: 25px;
+        }
+      }
 
       @media screen and (width <= 1000px) {
         #sidebar {
@@ -398,6 +413,10 @@
         </div>
       </div>
     </div>
+
+    <button class="my-location-btn" id="myButton">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="#3c6cb4" d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>
+    </button>
 
     <script>
       if (document.querySelector(".search_icon")) {
@@ -949,6 +968,70 @@
           });
         };
         fourStepSearch()
+
+        document.querySelector('#myButton').addEventListener('click', () => {
+          console.log(32);
+          getUserLocation()
+        })
+
+        function getUserLocation() {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              function (position) {
+                const userCoords = [
+                  position.coords.latitude,
+                  position.coords.longitude,
+                ];
+
+                console.log("User Location: ", userCoords);
+                showUserLocation(userCoords);
+              },
+              function (error) {
+                console.error("Error getting location: ", error);
+                alert("Location access denied or unavailable.");
+              }
+            );
+          } else {
+            alert("Geolocation is not supported by this browser.");
+          }
+        }
+        // getUserLocation()
+
+        function showUserLocation(coords) {
+        require(["esri/geometry/Point", "esri/symbols/SimpleMarkerSymbol", "esri/Graphic"], function (
+          Point,
+          SimpleMarkerSymbol,
+          Graphic
+        ) {
+          const [lat, lon] = coords;
+
+          view.goTo({
+            center: [lon, lat],
+            zoom: 15,
+          });
+
+          const userPoint = new Point({
+            longitude: lon,
+            latitude: lat,
+          });
+
+          const userMarker = new SimpleMarkerSymbol({
+            color: [0, 122, 255],
+            size: 10,
+            outline: { color: [255, 255, 255], width: 2 },
+          });
+
+          const userGraphic = new Graphic({
+            geometry: userPoint,
+            symbol: userMarker,
+          });
+
+          view.graphics.removeAll();
+          view.graphics.add(userGraphic);
+
+          checkIfPointIntersects(userPoint, coords);
+        });
+      }
 
         view.on("click", async (event) => {
           const clickPoint = event.mapPoint;
